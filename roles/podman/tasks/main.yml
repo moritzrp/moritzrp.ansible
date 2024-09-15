@@ -1,0 +1,12 @@
+---
+- name: Ensure Podman is installed
+  ansible.builtin.package:
+    name: podman
+    state: present
+
+- name: Enable login lingering
+  ansible.builtin.include_role:
+    name: moritzrp.ansible.login_lingering
+  loop: "{{ podman_login_lingering_users }}"
+  vars:
+    login_lingering_user: "{{ item }}"

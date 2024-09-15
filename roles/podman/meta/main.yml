@@ -1,0 +1,10 @@
+---
+galaxy_info:
+  author: moritzrp
+  description: Install Podman.
+  license: MIT
+  min_ansible_version: "2.1"
+  galaxy_tags:
+    - linux
+    - podman
+dependencies: []
