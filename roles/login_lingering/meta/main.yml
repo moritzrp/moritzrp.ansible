@@ -4,5 +4,7 @@ galaxy_info:
   description: Enable login lingering for a user.
   license: MIT
   min_ansible_version: "2.1"
-  galaxy_tags: []
+  galaxy_tags:
+    - linux
+    - systemd
 dependencies: []

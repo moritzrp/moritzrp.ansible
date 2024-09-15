@@ -37,7 +37,7 @@ None.
       ansible.builtin.include_role:
         name: moritzrp.ansible.login_lingering
       vars:
-        podman_login_lingering_users:
+        login_lingering_user:
           - myuser
 ```
 
