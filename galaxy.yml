@@ -1,0 +1,16 @@
+---
+namespace: moritzrp
+name: ansible
+version: 1.0.0
+readme: README.md
+authors:
+  - moritzrp
+description: Personal Ansible collection
+license:
+  - MIT
+license_file: ''
+tags: [linux]
+dependencies: {}
+repository: http://example.com/repository
+documentation: http://docs.example.com
+build_ignore: []
