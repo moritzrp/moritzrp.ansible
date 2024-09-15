@@ -1,0 +1,14 @@
+---
+argument_specs:
+  main:
+    short_description: Enable login lingering for a user.
+    options:
+      login_lingering_systemd_path:
+        description: Path to login lingering files
+        type: str
+        default: /var/lib/systemd/linger
+        required: false
+      login_lingering_user:
+        description: User for whom to enable login lingering.
+        type: str
+        required: true

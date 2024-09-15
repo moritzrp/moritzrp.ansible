@@ -1,0 +1,2 @@
+---
+login_lingering_systemd_path: /var/lib/systemd/linger

@@ -1,0 +1,22 @@
+---
+- name: Ensure lingering directory exists '{{ login_lingering_systemd_path }}'
+  ansible.builtin.file:
+    path: "{{ login_lingering_systemd_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Check if login lingering is already enabled for '{{ login_lingering_user }}'
+  ansible.builtin.stat:
+    path: "{{ login_lingering_systemd_path }}/{{ login_lingering_user }}"
+  register: lingering_file
+
+- name: Enable lingering for '{{ login_lingering_user }}'
+  ansible.builtin.file:
+    path: "{{ login_lingering_systemd_path }}/{{ login_lingering_user }}"
+    owner: root
+    group: root
+    mode: "0644"
+    state: touch
+  when: not lingering_file.stat.exists
