@@ -1,0 +1,55 @@
+---
+- name: Ensure firewalld is installed
+  ansible.builtin.package:
+    name: firewalld
+    state: present
+
+- name: Ensure firewalld is running and enabled
+  ansible.builtin.service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Get list of enabled services
+  ansible.builtin.command: firewall-cmd --list-services
+  register: firewall_preconfigured_services
+  changed_when: false # never makes changes
+
+- name: Get list of enabled ports
+  ansible.builtin.command: firewall-cmd --list-ports
+  register: firewall_preconfigured_ports
+  changed_when: false # never makes changes
+
+- name: Disable all unwanted services
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    state: disabled
+    immediate: true
+    permanent: true
+  loop: "{{ firewall_preconfigured_services.stdout.split() }}"
+  when: item not in firewall_services_enabled + firewall_services_defaults
+
+- name: Disable all unwanted ports
+  ansible.posix.firewalld:
+    port: "{{ item }}"
+    state: disabled
+    immediate: true
+    permanent: true
+  loop: "{{ firewall_preconfigured_ports.stdout.split() }}"
+  when: item not in firewall_ports_enabled
+
+- name: Ensure specified services are enabled
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop: "{{ firewall_services_enabled + firewall_services_defaults }}"
+
+- name: Ensure specified ports are enabled
+  ansible.posix.firewalld:
+    port: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop: "{{ firewall_ports_enabled }}"

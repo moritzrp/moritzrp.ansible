@@ -1,0 +1,5 @@
+---
+# E.g. http, https
+firewall_services_enabled: []
+# E.g. 8080/tcp
+firewall_ports_enabled: []

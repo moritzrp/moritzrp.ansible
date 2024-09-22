@@ -1,0 +1,3 @@
+---
+firewall_services_defaults:
+  - ssh
