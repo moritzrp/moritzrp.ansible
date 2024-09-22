@@ -58,6 +58,24 @@
     group: root
     mode: "0644"
 
+- name: Ensure redirect is set up
+  when: nginx_vhosts_redirect_http_to_https
+  block:
+    - name: Ensure redirect is available
+      ansible.builtin.template:
+        src: http_to_https.j2
+        dest: "{{ nginx_vhost_available }}/http_to_https"
+        owner: root
+        group: root
+        mode: "0644"
+    - name: Ensure redirect is enabled
+      ansible.builtin.file:
+        src: "{{ nginx_vhost_available }}/http_to_https"
+        dest: "{{ nginx_vhost_enabled }}/http_to_https"
+        owner: root
+        group: root
+        state: link
+
 - name: Ensure Nginx is running
   ansible.builtin.service:
     name: nginx

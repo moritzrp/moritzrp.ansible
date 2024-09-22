@@ -9,3 +9,7 @@ nginx_worker_connections: 1024
 # SSL config
 nginx_ssl_certificate_path: ""
 nginx_ssl_certificate_key_path: ""
+
+# Vhosts
+nginx_vhosts_redirect_http_to_https: true
+nginx_vhosts: []
