@@ -1,2 +1,4 @@
 ---
 podman_login_lingering_users: []
+podman_compose_install: false
+podman_compose_users: []

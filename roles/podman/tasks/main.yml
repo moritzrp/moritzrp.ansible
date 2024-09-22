@@ -10,3 +10,19 @@
   loop: "{{ podman_login_lingering_users }}"
   vars:
     login_lingering_user: "{{ item }}"
+
+- name: Set up podman-compose
+  when: podman_compose_install
+  block:
+    - name: Ensure pip is available
+      ansible.builtin.package:
+        name: python3-pip
+        state: present
+
+    - name: Ensure podman-compose is installed for user
+      ansible.builtin.pip:
+        name: podman-compose
+        extra_args: --user
+      become: true
+      become_user: "{{ item }}"
+      loop: "{{ podman_compose_users }}"
