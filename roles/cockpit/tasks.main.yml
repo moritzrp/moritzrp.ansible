@@ -1,0 +1,11 @@
+---
+- name: Ensure cockpit is installed
+  ansible.builtin.package:
+    name: cockpit
+    state: present
+
+- name: Ensure cockpit service is running
+  ansible.builtin.service:
+    name: cockpit.socket
+    state: started
+    enabled: true
