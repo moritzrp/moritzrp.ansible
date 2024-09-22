@@ -1,0 +1,65 @@
+---
+- name: Load OS specific variables
+  ansible.builtin.include_vars: "{{ ansible_os_family | lower }}.yml"
+
+- name: Debug
+  ansible.builtin.debug:
+    var: nginx_user
+
+- name: Set up on RedHat
+  ansible.builtin.include_tasks: redhat.yml
+  when: ansible_os_family == "RedHat"
+
+- name: Set up on Debian
+  ansible.builtin.include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+
+- name: Ensure sites-available and sites-enabled exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  loop:
+    - "{{ nginx_vhost_available }}"
+    - "{{ nginx_vhost_enabled }}"
+
+- name: Remove default vhost configs
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ nginx_conf_base_dir }}/conf.d/default.conf"
+    - "{{ nginx_vhost_enabled }}/default"
+
+- name: Ensure dhparam config is present
+  ansible.builtin.get_url:
+    url: https://ssl-config.mozilla.org/ffdhe2048.txt
+    dest: "{{ nginx_conf_base_dir }}/dhparam"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Ensure proxy_params config is present
+  ansible.builtin.template:
+    src: proxy_params.j2
+    dest: "{{ nginx_conf_base_dir }}/proxy_params"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Ensure ssl config is present
+  ansible.builtin.template:
+    src: conf.d/ssl.conf.j2
+    dest: "{{ nginx_conf_base_dir }}/conf.d/ssl.conf"
+    backup: true
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Ensure Nginx is running
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true

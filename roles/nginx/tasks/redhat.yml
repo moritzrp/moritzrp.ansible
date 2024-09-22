@@ -1,0 +1,14 @@
+---
+- name: Ensure Nginx Repository is present
+  ansible.builtin.template:
+    src: nginx.repo.j2
+    dest: /etc/yum.repos.d/nginx.repo
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Ensure Nginx is installed
+  ansible.builtin.dnf:
+    name: nginx
+    state: present
+    update_cache: true

@@ -1,0 +1,31 @@
+---
+- name: Common tasks
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Install vim
+      ansible.builtin.package:
+        name: vim
+        state: present
+
+- name: Converge Almalinux
+  hosts: nginx-alma
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Ensure SELinux is configured
+      ansible.builtin.include_role:
+        name: moritzrp.ansible.selinux
+    - name: Install Nginx
+      ansible.builtin.include_role:
+        name: moritzrp.ansible.nginx
+
+- name: Converge Ubuntu
+  hosts: nginx-ubuntu
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Install Nginx
+      ansible.builtin.include_role:
+        name: moritzrp.ansible.nginx
