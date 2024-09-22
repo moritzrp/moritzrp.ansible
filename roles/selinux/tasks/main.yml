@@ -1,0 +1,14 @@
+- name: Ensure SELinux packages are installed
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - selinux-policy
+    - selinux-policy-targeted
+    - setools-console
+    - setroubleshoot
+
+- name: Ensure SELinux is enabled
+  ansible.posix.selinux:
+    policy: targeted
+    state: enforcing
