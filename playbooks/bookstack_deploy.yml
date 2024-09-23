@@ -1,0 +1,27 @@
+---
+- name: Set up Bookstack
+  hosts: bookstack
+  become: true
+  tasks:
+    - name: Ensure SELinux is configured
+      ansible.builtin.include_role:
+        name: moritzrp.ansible.selinux
+    - name: Allow http network connect
+      ansible.posix.seboolean:
+        name: httpd_can_network_connect
+        state: true
+        persistent: true
+    - name: Allow http to listen on port 6875
+      community.general.seport:
+        ports: 6875
+        proto: tcp
+        setype: http_port_t
+        state: present
+
+    - name: Set up Bookstack
+      ansible.builtin.include_role:
+        name: moritzrp.ansible.bookstack
+
+    - name: Install Nginx
+      ansible.builtin.include_role:
+        name: moritzrp.ansible.nginx

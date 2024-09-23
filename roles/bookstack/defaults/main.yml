@@ -1,0 +1,22 @@
+---
+# Host config
+bookstack_host_user: bookstack
+bookstack_host_group: bookstack
+
+# General config
+bookstack_time_zone: Europe/Berlin
+bookstack_database_name: bookstack
+bookstack_database_user_name: bookstack
+
+# Container configs
+bookstack_container_network: bookstack-network
+
+bookstack_database_container_name: bookstack_db
+bookstack_database_container_image: lscr.io/linuxserver/mariadb
+bookstack_database_container_volume_name: bookstack_db_data
+
+bookstack_container_name: bookstack
+bookstack_container_image: lscr.io/linuxserver/bookstack
+bookstack_container_volume_name: bookstack_data
+bookstack_container_ports:
+  - 6875:80

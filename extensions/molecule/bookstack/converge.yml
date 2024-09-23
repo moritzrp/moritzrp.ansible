@@ -1,0 +1,40 @@
+---
+- name: Copy certificate
+  hosts: all
+  become: true
+  tasks:
+    - name: Copy certificate
+      ansible.builtin.copy:
+        src: bookstack.cer
+        dest: /etc/pki/tls/certs/bookstack.cert
+        owner: root
+        group: root
+        mode: "0644"
+    - name: Copy certificate key
+      ansible.builtin.copy:
+        src: bookstack.key
+        dest: /etc/pki/tls/private/bookstack.key
+        owner: root
+        group: 990
+        mode: "0640"
+
+- name: Set up Bookstack
+  ansible.builtin.import_playbook: moritzrp.ansible.bookstack_deploy
+  vars:
+    bookstack_app_url: https://bookstack.testing
+    bookstack_database_root_password: testing
+    bookstack_database_user_password: yadagada
+    
+    nginx_ssl_certificate_path: /etc/pki/tls/certs/bookstack.cert
+    nginx_ssl_certificate_key_path: /etc/pki/tls/private/bookstack.key
+    nginx_selinux_additional_ports:
+      - 6875
+    nginx_vhosts:
+      - server_name: bookstack.testing
+        enabled: true
+        include_proxy_params: true
+        options: []
+        locations:
+          - path: ~*
+            options:
+              - proxy_pass http://localhost:6875

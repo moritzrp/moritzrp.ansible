@@ -1,0 +1,67 @@
+---
+argument_specs:
+  main:
+    short_description: Main entry for bookstack
+    options:
+      bookstack_host_user:
+        type: str
+        required: false
+        default: bookstack
+      bookstack_host_group:
+        type: str
+        required: false
+        default: bookstack
+      bookstack_app_url:
+        type: str
+        required: true
+      bookstack_time_zone:
+        type: str
+        required: false
+        default: Europe/Berlin
+      bookstack_database_name:
+        type: str
+        required: false
+        default: bookstack
+      bookstack_database_root_password:
+        type: str
+        required: true
+      bookstack_database_user_name:
+        type: str
+        required: false
+        default: bookstack
+      bookstack_database_user_password:
+        type: str
+        required: true
+      bookstack_container_network:
+        type: str
+        required: false
+        default: bookstack-network
+      bookstack_database_container_volume_name:
+        type: str
+        required: false
+        default: bookstack_db_data
+      bookstack_database_container_name:
+        type: str
+        required: false
+        default: bookstack
+      bookstack_database_container_image:
+        type: str
+        required: false
+        default: lscr.io/linuxserver/mariadb
+      bookstack_container_name:
+        type: str
+        required: false
+        default: bookstack
+      bookstack_container_image:
+        type: str
+        required: false
+        default: lscr.io/linuxserver/bookstack
+      bookstack_container_volume_name:
+        type: str
+        required: false
+        default: bookstack_data
+      bookstack_container_ports:
+        type: list
+        required: false
+        default:
+          - 6875:80
