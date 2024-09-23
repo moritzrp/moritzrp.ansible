@@ -32,6 +32,7 @@
   loop:
     - "{{ nginx_conf_base_dir }}/conf.d/default.conf"
     - "{{ nginx_vhost_enabled }}/default"
+  notify: Restart nginx
 
 - name: Ensure dhparam config is present
   ansible.builtin.get_url:
@@ -57,9 +58,11 @@
     owner: root
     group: root
     mode: "0644"
+  notify: Restart nginx
 
 - name: Ensure redirect is set up
   when: nginx_vhosts_redirect_http_to_https
+  notify: Restart nginx
   block:
     - name: Ensure redirect is available
       ansible.builtin.template:
@@ -76,8 +79,15 @@
         group: root
         state: link
 
-- name: Ensure Nginx is running
-  ansible.builtin.service:
-    name: nginx
-    state: started
-    enabled: true
+- name: Ensure vhosts are set up
+  ansible.builtin.include_tasks: vhost.yml
+  loop: "{{ nginx_vhosts }}"
+
+- name: Ensure nginx.conf is set up
+  ansible.builtin.template:
+    src: "nginx.conf.j2"
+    dest: "{{ nginx_conf_file_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart nginx

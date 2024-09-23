@@ -1,0 +1,24 @@
+- name: Ensure vhost is available
+  ansible.builtin.template:
+    src: vhost.j2
+    dest: "{{ nginx_vhost_available }}/{{ item.server_name }}"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Ensure vhost is enabled
+  ansible.builtin.file:
+    src: "{{ nginx_vhost_available }}/{{ item.server_name }}"
+    dest: "{{ nginx_vhost_enabled }}/{{ item.server_name }}"
+    owner: root
+    group: root
+    state: link
+  when: item.enabled
+  notify: Restart nginx
+
+- name: Ensure vhost is disabled
+  ansible.builtin.file:
+    path: "{{ nginx_vhost_enabled }}/{{ item.server_name }}"
+    state: absent
+  when: not item.enabled
+  notify: Restart nginx

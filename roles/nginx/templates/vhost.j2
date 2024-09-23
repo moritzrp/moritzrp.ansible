@@ -1,0 +1,23 @@
+#jinja2:lstrip_blocks: True
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    
+    server_name {{ item.server_name }};
+
+    {% if item.include_proxy_params %}
+    include proxy_params;
+    {% endif %}
+
+    {% for option in item.options %}
+    {{ option }};
+    {% endfor %}
+
+    {% for location in item.locations %}
+    location {{ location.path }} {
+        {% for option in location.options %}
+        {{ option }};
+        {% endfor %}
+    }
+    {% endfor %}
+}
