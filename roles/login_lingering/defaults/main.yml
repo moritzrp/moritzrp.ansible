@@ -1,2 +1,3 @@
 ---
+login_lingering_user: ""
 login_lingering_systemd_path: /var/lib/systemd/linger

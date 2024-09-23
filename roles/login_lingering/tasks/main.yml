@@ -13,10 +13,6 @@
   register: lingering_file
 
 - name: Enable lingering for '{{ login_lingering_user }}'
-  ansible.builtin.file:
-    path: "{{ login_lingering_systemd_path }}/{{ login_lingering_user }}"
-    owner: root
-    group: root
-    mode: "0644"
-    state: touch
+  ansible.builtin.command: "loginctl enable-linger {{ login_lingering_user }}"
   when: not lingering_file.stat.exists
+  changed_when: true
