@@ -1,0 +1,7 @@
+---
+- name: Hello World
+  hosts: all
+  tasks:
+    - name: Run Hello World
+      ansible.builtin.include_role:
+        name: moritzrp.ansible.hello_world
