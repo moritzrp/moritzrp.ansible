@@ -7,3 +7,5 @@ collections:
     version: 1.5.4
   - name: containers.podman
     version: 1.15.4
+  - name: community.general
+    version: 9.4.0
