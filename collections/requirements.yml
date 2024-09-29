@@ -1,0 +1,9 @@
+---
+collections:
+  - name: git@github.com:moritzrp/moritzrp.ansible.git
+    type: git
+    version: master
+  - name: ansible.posix
+    version: 1.5.4
+  - name: containers.podman
+    version: 1.15.4
