@@ -1,0 +1,8 @@
+---
+- name: Set up Firewall
+  hosts: all
+  become: true
+  tasks:
+    - name: Ensure Firewall is set up
+      ansible.builtin.include_role:
+        name: moritzrp.ansible.firewall
