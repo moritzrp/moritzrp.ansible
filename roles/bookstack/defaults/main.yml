@@ -14,9 +14,13 @@ bookstack_container_network: bookstack-network
 bookstack_database_container_name: bookstack_db
 bookstack_database_container_image: lscr.io/linuxserver/mariadb
 bookstack_database_container_volume_name: bookstack_db_data
+bookstack_database_container_volume_import: false
+bookstack_database_container_volume_import_path: /tmp/bookstack_db_data.tar
 
 bookstack_container_name: bookstack
 bookstack_container_image: lscr.io/linuxserver/bookstack
 bookstack_container_volume_name: bookstack_data
+bookstack_container_volume_import: false
+bookstack_container_volume_import_path: /tmp/bookstack_data.tar
 bookstack_container_ports:
   - 6875:80

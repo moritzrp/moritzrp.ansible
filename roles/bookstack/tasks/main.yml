@@ -12,6 +12,8 @@
       password: "!"
       shell: /bin/bash
       create_home: true
+      home: /var/bookstack
+      move_home: true
       state: present
 
 - name: Install podman
