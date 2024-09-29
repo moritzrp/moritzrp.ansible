@@ -5,3 +5,6 @@
     - name: Run Hello World
       ansible.builtin.include_role:
         name: moritzrp.ansible.hello_world
+    - name: Test
+      ansible.builtin.debug:
+        var: bookstack_database_name
