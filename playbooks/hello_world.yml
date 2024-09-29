@@ -8,3 +8,6 @@
     - name: Test
       ansible.builtin.debug:
         var: bookstack_database_name
+    - name: Datbase name
+      ansible.builtin.debug:
+        var: mysql_database
