@@ -11,6 +11,12 @@ argument_specs:
         type: str
         required: false
         default: bookstack
+      bookstack_app_data_directory:
+        type: str
+        default: /srv/bookstack_app
+      bookstack_database_data_directory:
+        type: str
+        default: /srv/bookstack_db
       bookstack_app_url:
         type: str
         required: true
@@ -43,7 +49,7 @@ argument_specs:
       bookstack_database_container_name:
         type: str
         required: false
-        default: bookstack
+        default: bookstack_db
       bookstack_database_container_image:
         type: str
         required: false

@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: moritzrp
+  description: Set up Bookstack with Podman.
+  license: MIT
+  min_ansible_version: "2.1"
+  platforms:
+    - name: EL
+      versions:
+        - all
+  galaxy_tags:
+    - linux
+    - podman
+    - bookstack
+dependencies: []

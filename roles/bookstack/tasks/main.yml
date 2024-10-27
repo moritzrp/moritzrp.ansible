@@ -16,6 +16,17 @@
     move_home: true
     state: present
 
+- name: Ensure data directory exists '{{ item }}'
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ bookstack_host_user }}"
+    group: "{{ bookstack_host_group }}"
+    mode: "0750"
+  loop:
+    - "{{ bookstack_app_data_directory }}"
+    - "{{ bookstack_database_data_directory }}"
+
 - name: Install podman
   tags: ["podman"]
   ansible.builtin.include_role:
