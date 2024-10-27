@@ -51,7 +51,7 @@
         state: started
         network: "{{ bookstack_container_network }}"
         volumes:
-          - "{{ bookstack_database_container_volume_name }}:/config"
+          - "{{ bookstack_database_data_directory }}:/config:Z"
         env:
           TZ: "{{ bookstack_time_zone }}"
           MYSQL_ROOT_PASSWORD: "{{ bookstack_database_root_password }}"
@@ -66,7 +66,7 @@
         state: started
         network: "{{ bookstack_container_network }}"
         volumes:
-          - "{{ bookstack_container_volume_name }}:/config"
+          - "{{ bookstack_app_data_directory }}:/config:Z"
         env:
           TZ: "{{ bookstack_time_zone }}"
           APP_URL: "{{ bookstack_app_url }}"
