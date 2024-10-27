@@ -1,0 +1,13 @@
+---
+argument_specs:
+  main:
+    short_description: Main entry point for firewall role
+    options:
+      firewall_services_enabled:
+        type: list
+        default: []
+        description: Services that should be enabled (http, https, ...).
+      firewall_ports_enabled:
+        type: list
+        default: []
+        description: Ports that should be enabled (80/tcp, 443/tcp, ...).
