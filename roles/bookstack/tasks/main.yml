@@ -59,6 +59,7 @@
           MYSQL_USER: "{{ bookstack_database_user_name }}"
           MYSQL_PASSWORD: "{{ bookstack_database_user_password }}"
         userns: keep-id:uid=911,gid=911
+        user: root:911
         restart_policy: always
     - name: Run Bookstack
       containers.podman.podman_container:
@@ -78,4 +79,5 @@
           DB_DATABASE: "{{ bookstack_database_name }}"
         ports: "{{ bookstack_container_ports }}"
         userns: keep-id:uid=911,gid=911
+        user: root:911
         restart_policy: always
