@@ -1,66 +1,68 @@
 ---
 - name: Ensure group exists '{{ bookstack_host_group }}'
   ansible.builtin.group:
-      name: "{{ bookstack_host_group }}"
-      state: present
+    name: "{{ bookstack_host_group }}"
+    state: present
 
 - name: Ensure user exists '{{ bookstack_host_user }}'
   ansible.builtin.user:
-      name: "{{ bookstack_host_user }}"
-      comment: Bookstack user
-      group: "{{ bookstack_host_group }}"
-      password: "!"
-      shell: /bin/bash
-      create_home: true
-      home: /var/bookstack
-      move_home: true
-      state: present
+    name: "{{ bookstack_host_user }}"
+    comment: Bookstack user
+    group: "{{ bookstack_host_group }}"
+    password: "!"
+    shell: /bin/bash
+    home: "/home/{{ bookstack_host_user }}"
+    create_home: true
+    move_home: true
+    state: present
 
 - name: Install podman
+  tags: ["podman"]
   ansible.builtin.include_role:
-      name: moritzrp.ansible.podman
+    name: moritzrp.ansible.podman
   vars:
-      podman_login_lingering_users:
-          - "{{ bookstack_host_user }}"
+    podman_login_lingering_users:
+      - "{{ bookstack_host_user }}"
 
 - name: Create Podman deployments
+  tags: ["podman"]
   become: true
   become_user: "{{ bookstack_host_user }}"
   block:
-      - name: Ensure network exists
-        containers.podman.podman_network:
-            name: "{{ bookstack_container_network }}"
-            state: present
-      - name: Run BookstackDB
-        containers.podman.podman_container:
-            name: "{{ bookstack_database_container_name }}"
-            image: "{{ bookstack_database_container_image }}"
-            state: started
-            network: "{{ bookstack_container_network }}"
-            volumes:
-                - "{{ bookstack_database_container_volume_name }}:/config"
-            env:
-                TZ: "{{ bookstack_time_zone }}"
-                MYSQL_ROOT_PASSWORD: "{{ bookstack_database_root_password }}"
-                MYSQL_DATABASE: "{{ bookstack_database_name }}"
-                MYSQL_USER: "{{ bookstack_database_user_name }}"
-                MYSQL_PASSWORD: "{{ bookstack_database_user_password }}"
-            restart_policy: always
-      - name: Run Bookstack
-        containers.podman.podman_container:
-            name: "{{ bookstack_container_name }}"
-            image: "{{ bookstack_container_image }}"
-            state: started
-            network: "{{ bookstack_container_network }}"
-            volumes:
-                - "{{ bookstack_container_volume_name }}:/config"
-            env:
-                TZ: "{{ bookstack_time_zone }}"
-                APP_URL: "{{ bookstack_app_url }}"
-                DB_HOST: "{{ bookstack_database_container_name }}"
-                DB_PORT: 3306
-                DB_USER: "{{ bookstack_database_user_name }}"
-                DB_PASS: "{{ bookstack_database_user_password }}"
-                DB_DATABASE: "{{ bookstack_database_name }}"
-            ports: "{{ bookstack_container_ports }}"
-            restart_policy: always
+    - name: Ensure network exists
+      containers.podman.podman_network:
+        name: "{{ bookstack_container_network }}"
+        state: present
+    - name: Run BookstackDB
+      containers.podman.podman_container:
+        name: "{{ bookstack_database_container_name }}"
+        image: "{{ bookstack_database_container_image }}"
+        state: started
+        network: "{{ bookstack_container_network }}"
+        volumes:
+          - "{{ bookstack_database_container_volume_name }}:/config"
+        env:
+          TZ: "{{ bookstack_time_zone }}"
+          MYSQL_ROOT_PASSWORD: "{{ bookstack_database_root_password }}"
+          MYSQL_DATABASE: "{{ bookstack_database_name }}"
+          MYSQL_USER: "{{ bookstack_database_user_name }}"
+          MYSQL_PASSWORD: "{{ bookstack_database_user_password }}"
+        restart_policy: always
+    - name: Run Bookstack
+      containers.podman.podman_container:
+        name: "{{ bookstack_container_name }}"
+        image: "{{ bookstack_container_image }}"
+        state: started
+        network: "{{ bookstack_container_network }}"
+        volumes:
+          - "{{ bookstack_container_volume_name }}:/config"
+        env:
+          TZ: "{{ bookstack_time_zone }}"
+          APP_URL: "{{ bookstack_app_url }}"
+          DB_HOST: "{{ bookstack_database_container_name }}"
+          DB_PORT: 3306
+          DB_USER: "{{ bookstack_database_user_name }}"
+          DB_PASS: "{{ bookstack_database_user_password }}"
+          DB_DATABASE: "{{ bookstack_database_name }}"
+        ports: "{{ bookstack_container_ports }}"
+        restart_policy: always
